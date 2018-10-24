@@ -1,7 +1,8 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
- 
+#include <time.h>
+
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -50,6 +51,21 @@ size_t strlen(const char* str)
 	return len;
 }
  
+int delay(){
+	int64_t i = 320000000;
+	while(i>0){
+		int64_t j = 32000000;
+		while(j>0){
+			int64_t k = 32000000;
+			while(k>0){
+				k--;
+			}
+			j--;
+		}
+		i--;
+	}
+	return 0;
+}
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
  
@@ -62,7 +78,7 @@ void terminal_initialize(void)
 {
 	terminal_row = 0;
 	terminal_column = 0;
-	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+	terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLUE);
 	terminal_buffer = (uint16_t*) 0xB8000;
 	for (size_t y = 0; y < VGA_HEIGHT; y++) {
 		for (size_t x = 0; x < VGA_WIDTH; x++) {
@@ -111,4 +127,6 @@ void kernel_main(void)
  
 	/* Newline support is left as an exercise. */
 	terminal_writestring("Hello, kernel World!\n");
+	delay();
+	terminal_writestring("Hello, kernel 2222222!\n");	
 }
